@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /* В задаче не использовать циклы for, while. Все действия по обработке данных выполнять с использованием LINQ
  * 
@@ -45,19 +43,48 @@ namespace Task01
             try
             {
                 // Попробуйте осуществить считывание целочисленного массива, записав это ОДНИМ ВЫРАЖЕНИЕМ.
-                arr = 
+                arr = Console.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(str => int.Parse(str)).ToArray();
             }
-            
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("ArgumentNullException");
+                return;
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("ArgumentException");
+                return;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("FormatException");
+                return;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+                return;
+            }
+
             // использовать синтаксис запросов!
-            IEnumerable<int> arrQuery = from 
+            IEnumerable<int> arrQuery = from a in arr where (a < 0 || a % 2 == 0) select a;
 
             // использовать синтаксис методов!
-            IEnumerable<int> arrMethod = arr.
+            IEnumerable<int> arrMethod = arr.Where(a => a < 0 || a % 2 == 0);
 
             try
             {
                 PrintEnumerableCollection<int>(arrQuery, ":");
                 PrintEnumerableCollection<int>(arrMethod, "*");
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("ArgumentNullException");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("InvalidOperationException");
             }
         }
 
@@ -65,8 +92,9 @@ namespace Task01
         // P.S. Есть два способа, оставьте тот, в котором применяется LINQ...
         public static void PrintEnumerableCollection<T>(IEnumerable<T> collection, string separator)
         {
-           
-           
+            Console.WriteLine(collection.Select(el => el.ToString()).Aggregate("",
+                (string prev, string next) => prev + next + separator,
+                (string result) => result.Substring(0, result.Length - 1)));
         }
     }
 }
