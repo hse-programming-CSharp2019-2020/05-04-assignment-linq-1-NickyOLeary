@@ -43,7 +43,7 @@ namespace Task02
             {
                 // Попробуйте осуществить считывание целочисленного массива, записав это ОДНИМ ВЫРАЖЕНИЕМ.
                 arr = Console.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                    .TakeWhile(s => int.Parse(s) != 0).Select(s => int.Parse(s)).ToArray();
+                    .Select(str => int.Parse(str)).ToArray();
             }
             catch (ArgumentNullException)
             {
@@ -67,21 +67,20 @@ namespace Task02
             }
 
 
-            var filteredCollection = Array.TrueForAll(arr, a => a != 0)
-                ? arr : arr.Where(a => a < 0);
+            var filteredCollection = arr.TakeWhile(a => a != 0).ToArray();
 
             try
             {
 
                 // использовать статическую форму вызова метода подсчета среднего
-                double averageUsingStaticForm = Enumerable.Aggregate(arr, 0,
+                double averageUsingStaticForm = Enumerable.Aggregate(filteredCollection, 0,
                     (int prev, int next) => checked(prev + next * next),
-                    (int result) => (double)result / arr.Length);
+                    (int result) => (double)result / filteredCollection.Length);
                 Console.WriteLine($"{averageUsingStaticForm:F3}".Replace('.', ','));
                 // использовать объектную форму вызова метода подсчета среднего
-                double averageUsingInstanceForm = arr.Aggregate(0,
+                double averageUsingInstanceForm = filteredCollection.Aggregate(0,
                     (prev, next) => prev + next * next,
-                    result => (double)result / arr.Length);
+                    result => (double)result / filteredCollection.Length);
                 Console.WriteLine($"{averageUsingInstanceForm:F3}".Replace('.', ','));
 
                 // вывести элементы коллекции в одну строку
