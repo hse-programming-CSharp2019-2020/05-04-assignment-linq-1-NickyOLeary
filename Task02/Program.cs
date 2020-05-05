@@ -42,26 +42,70 @@ namespace Task02
             try
             {
                 // Попробуйте осуществить считывание целочисленного массива, записав это ОДНИМ ВЫРАЖЕНИЕМ.
-                arr = 
+                arr = Console.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .TakeWhile(s => int.Parse(s) != 0).Select(s => int.Parse(s)).ToArray();
             }
-            
-            
-            var filteredCollection = arr.
-           
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("ArgumentNullException");
+                return;
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("ArgumentException");
+                return;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("FormatException");
+                return;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+                return;
+            }
+
+
+            var filteredCollection = Array.TrueForAll(arr, a => a != 0)
+                ? arr : arr.Where(a => a < 0);
+
             try
             {
-                
-                // использовать статическую форму вызова метода подсчета среднего
-                double averageUsingStaticForm = 
-                // использовать объектную форму вызова метода подсчета среднего
-                double averageUsingInstanceForm = 
 
+                // использовать статическую форму вызова метода подсчета среднего
+                double averageUsingStaticForm = Enumerable.Aggregate(arr, 0,
+                    (int prev, int next) => prev + next * next,
+                    (int result) => (double)result / arr.Length);
+                Console.WriteLine($"{averageUsingStaticForm:F3}");
+                // использовать объектную форму вызова метода подсчета среднего
+                double averageUsingInstanceForm = arr.Aggregate(0,
+                    (prev, next) => prev + next * next,
+                    result => (double)result / arr.Length);
+                Console.WriteLine($"{averageUsingInstanceForm:F3}");
 
                 // вывести элементы коллекции в одну строку
-                filteredCollection.
+                Console.WriteLine(filteredCollection.Select(el => el.ToString()).Aggregate("",
+                (string prev, string next) => prev + next + " ",
+                (string result) => result.Substring(0, result.Length - 1)));
             }
-          
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("ArgumentNullException");
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("InvalidOperationException");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("ArgumentOutOfRangeException");
+            }
         }
-        
+
     }
 }
