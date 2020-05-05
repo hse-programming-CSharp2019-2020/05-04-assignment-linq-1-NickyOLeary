@@ -68,7 +68,12 @@ namespace Task02
 
 
             var filteredCollection = arr.TakeWhile(a => a != 0).ToArray();
-
+            if(filteredCollection.Length == 0)
+            {
+                Console.WriteLine("InvalidOperationException");
+                return;
+            }
+            
             try
             {
 
